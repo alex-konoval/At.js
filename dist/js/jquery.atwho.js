@@ -88,7 +88,7 @@ DEFAULT_CALLBACKS = {
     });
   },
   tplEval: function(tpl, map) {
-    var error, error1, template;
+    var error, template;
     template = tpl;
     try {
       if (typeof tpl !== 'string') {
@@ -142,7 +142,7 @@ App = (function() {
   };
 
   App.prototype.setupRootElement = function(iframe, asRoot) {
-    var error, error1;
+    var error;
     if (asRoot == null) {
       asRoot = false;
     }
@@ -411,7 +411,7 @@ Controller = (function() {
   };
 
   Controller.prototype.callDefault = function() {
-    var args, error, error1, funcName;
+    var args, error, funcName;
     funcName = arguments[0], args = 2 <= arguments.length ? slice.call(arguments, 1) : [];
     try {
       return DEFAULT_CALLBACKS[funcName].apply(this, args);
@@ -437,7 +437,7 @@ Controller = (function() {
   };
 
   Controller.prototype.getOpt = function(at, default_value) {
-    var e, error1;
+    var e;
     try {
       return this.setting[at];
     } catch (error1) {
@@ -742,7 +742,7 @@ EditableController = (function(superClass) {
       }
     }
     $(range.startContainer).closest('.atwho-inserted').addClass('atwho-query').siblings().removeClass('atwho-query');
-    if (($query = $(".atwho-query", this.app.document)).length > 0 && $query.is(':empty') && $query.text().length === 0) {
+    if (($query = $(".atwho-query", this.app.$inputor)).length > 0 && $query.is(':empty') && $query.text().length === 0) {
       $query.remove();
     }
     if (!this._movingEvent(e)) {

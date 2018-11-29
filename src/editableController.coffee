@@ -72,7 +72,7 @@ class EditableController extends Controller
       .addClass 'atwho-query'
       .siblings().removeClass 'atwho-query'
 
-    if ($query = $ ".atwho-query", @app.document).length > 0 \
+    if ($query = $ ".atwho-query", @app.$inputor).length > 0 \
         and $query.is(':empty') and $query.text().length == 0
       $query.remove()
 
