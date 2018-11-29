@@ -15,14 +15,19 @@ class App
     $ doc.body
       .append @$el = $ "<div class='atwho-container'></div>"
 
-  setupRootElement: (iframe, asRoot=false) ->
+  setupRootElement: (iframe, asRoot=false, selfBoundedContext=false) ->
     if iframe
       @window = iframe.contentWindow
       @document = iframe.contentDocument || @window.document
       @iframe = iframe
     else
-      @document = @$inputor[0].ownerDocument
-      @window = @document.defaultView || @document.parentWindow
+      if selfBoundedContext
+        @document = @$inputor[0]
+        document = @$inputor[0].ownerDocument
+        @window = document.defaultView || document.parentWindow
+      else
+        @document = @$inputor[0].ownerDocument
+        @window = @document.defaultView || @document.parentWindow
       try
         @iframe = @window.frameElement
       catch error

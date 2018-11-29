@@ -88,7 +88,7 @@ DEFAULT_CALLBACKS = {
     });
   },
   tplEval: function(tpl, map) {
-    var error, error1, template;
+    var error, template;
     template = tpl;
     try {
       if (typeof tpl !== 'string') {
@@ -141,18 +141,27 @@ App = (function() {
     return $(doc.body).append(this.$el = $("<div class='atwho-container'></div>"));
   };
 
-  App.prototype.setupRootElement = function(iframe, asRoot) {
-    var error, error1;
+  App.prototype.setupRootElement = function(iframe, asRoot, selfBoundedContext) {
+    var document, error;
     if (asRoot == null) {
       asRoot = false;
+    }
+    if (selfBoundedContext == null) {
+      selfBoundedContext = false;
     }
     if (iframe) {
       this.window = iframe.contentWindow;
       this.document = iframe.contentDocument || this.window.document;
       this.iframe = iframe;
     } else {
-      this.document = this.$inputor[0].ownerDocument;
-      this.window = this.document.defaultView || this.document.parentWindow;
+      if (selfBoundedContext) {
+        this.document = this.$inputor[0];
+        document = this.$inputor[0].ownerDocument;
+        this.window = document.defaultView || document.parentWindow;
+      } else {
+        this.document = this.$inputor[0].ownerDocument;
+        this.window = this.document.defaultView || this.document.parentWindow;
+      }
       try {
         this.iframe = this.window.frameElement;
       } catch (error1) {
@@ -411,7 +420,7 @@ Controller = (function() {
   };
 
   Controller.prototype.callDefault = function() {
-    var args, error, error1, funcName;
+    var args, error, funcName;
     funcName = arguments[0], args = 2 <= arguments.length ? slice.call(arguments, 1) : [];
     try {
       return DEFAULT_CALLBACKS[funcName].apply(this, args);
@@ -437,7 +446,7 @@ Controller = (function() {
   };
 
   Controller.prototype.getOpt = function(at, default_value) {
-    var e, error1;
+    var e;
     try {
       return this.setting[at];
     } catch (error1) {
@@ -1165,7 +1174,7 @@ $.fn.atwho = function(method) {
   this.filter('textarea, input, [contenteditable=""], [contenteditable=true]').each(function() {
     var $this, app;
     if (!(app = ($this = $(this)).data("atwho"))) {
-      $this.data('atwho', (app = new App(this)));
+      $this.data('atwho', (app = new App(this, method.selfBoundedContext)));
     }
     if (typeof method === 'object' || !method) {
       return app.reg(method.at, method);
@@ -1207,7 +1216,8 @@ $.fn.atwho["default"] = {
   editableAtwhoQueryAttrs: {},
   scrollDuration: 150,
   suspendOnComposing: true,
-  lookUpOnClick: true
+  lookUpOnClick: true,
+  selfBoundedContext: false
 };
 
 $.fn.atwho.debug = false;

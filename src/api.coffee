@@ -20,7 +20,7 @@ $.fn.atwho = (method) ->
   result = null
   this.filter('textarea, input, [contenteditable=""], [contenteditable=true]').each ->
     if not app = ($this = $ this).data "atwho"
-      $this.data 'atwho', (app = new App this)
+      $this.data 'atwho', (app = new App this, method.selfBoundedContext)
     if typeof method is 'object' || !method
       app.reg method.at, method
     else if Api[method] and app
@@ -54,6 +54,7 @@ $.fn.atwho.default =
   editableAtwhoQueryAttrs: {}
   scrollDuration: 150
   suspendOnComposing: true
-  lookUpOnClick: true
+  lookUpOnClick: true,
+  selfBoundedContext: false
 
 $.fn.atwho.debug = false
